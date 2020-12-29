@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<nice-header></nice-header>
-    <router-view /> 
+		<router-view />
 	</div>
 </template>
 
@@ -14,3 +14,9 @@ export default {
 	},
 };
 </script>
+<style lang="stylus" scoped>
+@import './assets/styles/iconfont.css';
+.fly{
+
+}
+</style>

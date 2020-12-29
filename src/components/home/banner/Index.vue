@@ -5,6 +5,7 @@
 				<img :src="item.imageUrl" :alt="item.typeTitle" />
 			</swiper-slide>
 		</swiper>
+		<div class="swiper-pagination" name="pagination"></div>
 	</div>
 </template>
 
@@ -19,11 +20,11 @@ export default {
 				spaceBetween: 30, // 图片间隔多少像素
 				slidesPerGroup: 3, // 一次滑动多少张图片
 				loop: true, // 开启无缝滚动
-				loopFillGroupWithBlank: true,
-				centeredSlides: true,
+				loopFillGroupWithBlank: true, // 图片不够时 添加空白slide
+				centeredSlides: true, // active slide会居中，而不是默认状态下的居左。
 				paginationClickable: true, //分页器能点击
 				grabCursor: true, //鼠标悬变成手
-				pagination: ".swiper-pagination",
+				pagination: ".swiper-pagination", // 分页器样式
 			},
 		};
 	},
@@ -38,7 +39,7 @@ export default {
 			try {
 				let res = await this.$api.getBanner();
 				this.banners = res.banners;
-				this.bannersBg = res.banners[0].imageeUrl;
+				this.bannersBg = res.banners[0].imageUrl;
 			} catch (err) {
 				console.log(err);
 			}
@@ -55,13 +56,15 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import '~assets/styles/variable.styl';
+
 .banner >>> .swiper-pagination {
   width: 100%;
   bottom: -20px;
   .swiper-pagination-bullet {
     width: 6px;
     height: 6px;
-    background: #a3a3ac;
+    background: #a3a3ac ;
     opacity: 0.8;
     border-radius: 50%;
     margin: 0 5px;
