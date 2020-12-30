@@ -1,19 +1,24 @@
 <template>
 	<div class="home-wrap container">
 		<banner></banner>
-    <recommend-songs></recommend-songs>
+		<recommend-songs></recommend-songs>
+    <recommend-music></recommend-music>
 	</div>
 </template>
 
 <script>
 import Banner from "components/home/banner/Index";
 import RecommendSongs from "components/home/recommend-songs/Index";
+import RecommendMusic from "components/home/recommend-music/Index";
+
 export default {
 	components: {
-    Banner,
-    RecommendSongs
+		Banner,
+    RecommendSongs,
+    RecommendMusic
 	},
 };
 </script>
 
-<style lang="stylus" scoped></style>
+<style lang="stylus" scoped>
+</style>
