@@ -27,7 +27,7 @@ export default {
   watch: {},
   // 生命周期 - 创建完成(可以访问当前this实例)
   created() {
-    console.log(this.songList);
+    console.log(this.songList)
   },
   // 生命周期 - 挂载完成(可以访问dom元素)
   mounted() {}
