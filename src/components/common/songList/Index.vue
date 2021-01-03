@@ -1,6 +1,15 @@
 <template>
   <div class="list">
-    <div class="item" v-for="(item, index) of songList" :key="item.id">
+    <div
+      class="item "
+      v-for="(item, index) of songList"
+      :key="item.id"
+      :class="
+        index == currentIndex && currentSong.id == item.id && playing
+          ? 'playing'
+          : ''
+      "
+    >
       <div class="wrapper flex-center shadow">
         <div class="index-container flex-center">
           <span class="num">{{ utils.formatZero(index + 1, 2) }}</span>
@@ -11,8 +20,14 @@
             <div class="line" style="animation-delay: -0.9s;"></div>
             <div class="line" style="animation-delay: -0.6s;"></div>
           </div>
-          <i class="iconfont nicebofang2 play-btn"></i>
-          <i class="iconfont nicezanting1 pause-btn"></i>
+          <i
+            class="iconfont nicebofang2 play-btn"
+            @click="playSong(item, index)"
+          ></i>
+          <i
+            class="iconfont nicezanting1 pause-btn"
+            @click="pauseSong(item, index)"
+          ></i>
         </div>
         <div class="avatar">
           <el-image
@@ -48,6 +63,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: '',
   props: {
@@ -63,9 +79,22 @@ export default {
     return {}
   },
   // 方法
-  methods: {},
+  methods: {
+    playSong(item, index) {
+      this.selectPlay({
+        list: this.songList,
+        index
+      })
+    },
+    pauseSong(item, index) {
+      this.pausePlay()
+    },
+    ...mapActions(['selectPlay','pausePlay'])
+  },
   // 计算属性
-  computed: {},
+  computed: {
+    ...mapGetters(['currentIndex', 'playing', 'currentSong'])
+  },
   // 监控data中的数据变化
   watch: {},
   // 生命周期 - 创建完成(可以访问当前this实例)

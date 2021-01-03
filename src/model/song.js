@@ -9,6 +9,7 @@ export default class Song {
     album,
     duration,
     image,
+    url,
     playOCount,
     score
   }) {
@@ -18,6 +19,7 @@ export default class Song {
     this.album = album
     this.duration = duration
     this.image = image
+    this.url = url,
     this.playOCount = playOCount
     this.score = score
   }
@@ -31,6 +33,7 @@ export function createSong(musicData) {
     album: musicData.al ? musicData.al.name : musicData.album.name,
     duration: utils.formatSecond(musicData.dt || musicData.duration),
     image: musicData.al ? musicData.al.picUrl : musicData.album.artist.img1v1Url,
+    url: `https://music.163.com/song/media/outer/url?id=${musicData.id}.mp3`,
     playOCount: musicData.playOCount || '',
     score: musicData.score || ''
   })
