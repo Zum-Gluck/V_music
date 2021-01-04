@@ -26,3 +26,9 @@ export const getSongDetail = (ids, timestamp) => api.post(`/song/detail?timestam
  * @method 获取歌词
  */
 export const getLyric = id => api.post(`/lyric?id=${id}`, {})
+
+/**
+ * @method 获取歌手
+ */
+
+export const getHotSinger = () => api.get('/top/artists?offset=0&limit=30', {})
