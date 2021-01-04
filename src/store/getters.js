@@ -14,7 +14,7 @@ export const playing = state => state.playing
 export const playList = state => state.playList
 
 // 顺序列表 
-export const squenceList = state => state.squenceList
+export const sequenceList = state => state.sequenceList
 
 // 当前播放模式 -> 循环 -> 单曲 -> 随机
 export const mode = state => state.mode

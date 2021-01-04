@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="player-bar shadow flex-row">
+    <div class="player-bar shadow flex-row" v-if="playList.length > 0">
       <!-- 头像 -->
       <div class="avatar">
         <img :src="currentSong.image" alt="" />
@@ -40,6 +40,7 @@
         @pause="audioPause"
         @error="audioError"
         @timeupdate="updateTime($event)"
+        @ended="audioEnd"
       ></audio>
 
       <!-- 音量控件 -->
@@ -58,7 +59,7 @@
 
       <!-- 工具栏 -->
       <div class="tool">
-        <i class="iconfont"></i>
+        <i class="iconfont" :class="modeIcon" @click="modeChange"></i>
         <i class="iconfont nicegeci32" @click="showLyric = !showLyric"></i>
         <i class="iconfont nicebofangliebiao24"></i>
       </div>
@@ -95,6 +96,7 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import Lyric from 'lyric-parser'
+import { playMode } from 'common/playConfig.js'
 import progressBar from '../progressBar/Index'
 import scroll from '../scroll/Index'
 export default {
@@ -147,6 +149,15 @@ export default {
     updateTime(e) {
       this.currentTime = e.target.currentTime
     },
+    // 播放完成
+    audioEnd() {
+      this.currentTime = 0
+      if (this.mode == playMode.loop) {
+        this.loopSong()
+      } else {
+        this.nextSong()
+      }
+    },
     // 切换播放状态
     togglePlaying() {
       if (!this.songReady) return //从未播放 阻止代码向下执行
@@ -177,6 +188,15 @@ export default {
       // 如果正在暂停 让他播放
       if (!this.playing) {
         this.togglePlaying()
+      }
+    },
+    // 单曲循环播放
+    loopSong() {
+      this.$refs.audio.currentTime = 0
+      this.$refs.audio.play()
+      this.SET_PLAYING_STATE(true)
+      if (this.currentLyric) {
+        this.currentLyric.seek(0)
       }
     },
     // 监听进度条改变
@@ -240,6 +260,25 @@ export default {
       }
       this.isMuted = !this.isMuted
     },
+    modeChange() {
+      const mode = (this.mode + 1) % 3
+      this.SET_PLAY_MODE(mode)
+      let list = null
+      console.log(this.sequenceList)
+      if (mode === playMode.random) {
+        //如果是随机模式
+        list = this.utils.shuffle(this.sequenceList)
+      } else {
+        list = this.sequenceList
+      }
+      console.log(list)
+      this.resetCurrentIndex(list)
+      this.SET_PLAYLIST(list)
+    },
+    resetCurrentIndex(list) {
+      let index = list.findIndex(item => item.id == this.currentSong.id)
+      this.SET_CURRENT_INDEX(index)
+    },
     // 日期格式化
     formatTime(interval) {
       interval = interval | 0 //去掉小数部分  相当于 Math.floor
@@ -251,18 +290,36 @@ export default {
     ...mapMutations([
       'SET_PLAYING_STATE',
       'SET_CURRENT_INDEX',
-      'SET_PLAYING_STATE'
+      'SET_PLAYING_STATE',
+      'SET_PLAY_MODE',
+      'SET_CURRENT_INDEX',
+      'SET_PLAYLIST'
     ])
   },
   // 计算属性
   computed: {
+    // 进度条百分比
     percent() {
       return this.currentTime / this.currentSong.duration
     },
+    // 静音icon
     Muted() {
       return this.isMuted ? 'nicejingyin1' : 'niceshengyin1'
     },
-    ...mapGetters(['currentSong', 'playing', 'currentIndex', 'playList']),
+    // mode图标
+    modeIcon() {
+      if (this.mode == playMode.sequence) return 'nicexunhuanbofang24'
+      if (this.mode == playMode.loop) return 'nicebofangqidanquxunhuan'
+      if (this.mode == playMode.random) return 'nicebofangqisuijibofang'
+    },
+    ...mapGetters([
+      'currentSong',
+      'playing',
+      'currentIndex',
+      'playList',
+      'mode',
+      'sequenceList'
+    ]),
     playIcon() {
       return this.playing ? 'nicezanting1' : 'nicebofang2'
     }
