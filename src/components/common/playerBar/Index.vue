@@ -23,7 +23,7 @@
       <!-- 进度条 -->
       <div class="progress-wrap" id="progress-wrap">
         <p class="current-time">{{ formatTime(currentSong) }}</p>
-        <progress-bar></progress-bar>
+        <progress-bar @percentChange="percentChange"></progress-bar>
         <div class="duration-time">
           {{ formatTime(currentSong.duration) }}
         </div>
@@ -37,23 +37,78 @@
         @pause="audioPause"
         @error="audioError"
       ></audio>
+
+      <!-- Lyric List -->
+      <transition name="fade">
+        <div class="lyric-box shadow">
+          <div class="title flex-between">歌词</div>
+          <scroll>
+            <div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+              <div>123</div>
+            </div>
+          </scroll>
+          <div class="foot"></div>
+        </div>
+      </transition>
     </div>
   </transition>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
+import Lyric from 'lyric-parser'
 import progressBar from '../progressBar/Index'
+import scroll from '../scroll/Index'
 export default {
   name: '',
   // 组件
   components: {
-    progressBar
+    progressBar,
+    scroll
   },
   // 变量
   data() {
     return {
-      songReady: false // 是否开始播放
+      songReady: false, // 是否开始播放
+      currentLyric: null //当前歌词
     }
   },
   // 方法
@@ -106,6 +161,22 @@ export default {
         this.togglePlaying()
       }
     },
+    // 监听进度条改变
+    percentChange(percent) {
+      console.log(percent)
+    },
+    // 处理歌词
+    async getLyric(id) {
+      let res = await this.$api.getLyric(id)
+      if (res.code != 200) return
+      let lyric = res.lrc.lyric
+      this.currentLyric = new Lyric(lyric, this.lyricHandle)
+      console.log(this.currentLyric)
+    },
+    // 歌词回调
+    lyricHandle({ lineNum, txt }) {
+      console.log(1)
+    },
     // 日期格式化
     formatTime(interval) {
       interval = interval | 0 //去掉小数部分  相当于 Math.floor
@@ -151,6 +222,8 @@ export default {
       this.timer = setTimeout(() => {
         this.songReady = true
       }, 5000)
+
+      this.getLyric(newSong.id)
     },
     playing(isPlaying) {
       // 监听播放状态
@@ -172,6 +245,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.aaa{
+  height 300px
+}
 .fade-enter {
   opacity: 0;
   transform: translate3d(0, 30px, 0);

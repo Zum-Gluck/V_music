@@ -8,8 +8,10 @@
 	},
 	"dependencies": {
 		"axios": "^0.21.1",
+		"better-scroll": "^1.6.0",
 		"core-js": "^3.6.4",
 		"element-ui": "^2.4.5",
+		"lyric-parser": "^1.0.1",
 		"qs": "^6.9.4",
 		"swiper": "^5.4.5",
 		"vue": "^2.6.11",

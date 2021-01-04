@@ -49,7 +49,8 @@ export default {
     },
     // 按钮抬起
     progressMouseUp(e) {
-      if (e.button === 0) { // 没有按键
+      if (e.button === 0) {
+        // 没有按键
         if (document.onmousemove == null) {
           return
         }
@@ -57,14 +58,28 @@ export default {
         document.onmouseup = null
         this.touch.initiated = false
       }
+      this._triggerPercent()
     },
     // 点击进度条
     progressClick(e) {
-      let offsetWith = e.pageX - this.$refs.progressBar.offsetLeft  - progressBtnWidth / 2
+      let offsetWith =
+        e.pageX - this.$refs.progressBar.offsetLeft - progressBtnWidth / 2
       this._offset(offsetWith)
+      this._triggerPercent()
     },
+    // 设置进度
     _offset(offsetWithd) {
       this.$refs.progress.style.width = `${offsetWithd}px`
+    },
+    // 发送自定义事件
+    _triggerPercent() {
+      this.$emit('percentChange', this._getPercent())
+    },
+    // 获取进度的百分比
+    _getPercent() {
+      const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
+      // console.log(this.$refs.progress.clientWidth / barWidth)
+      return this.$refs.progress.clientWidth / barWidth
     }
   },
   // 计算属性
@@ -74,9 +89,7 @@ export default {
   // 生命周期 - 创建完成(可以访问当前this实例)
   created() {},
   // 生命周期 - 挂载完成(可以访问dom元素)
-  mounted() {
-    this._offset(100)
-  }
+  mounted() {}
 }
 </script>
 

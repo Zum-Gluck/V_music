@@ -21,3 +21,8 @@ export const getNewsongs = limit => api.get(`/personalized/newsong?limit=${limit
  * @method 获取歌曲详情
  */
 export const getSongDetail = (ids, timestamp) => api.post(`/song/detail?timestamp=${timestamp}`, { ids })
+
+/**
+ * @method 获取歌词
+ */
+export const getLyric = id => api.post(`/lyric?id=${id}`, {})

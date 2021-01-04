@@ -46,7 +46,6 @@ export default {
 
       let res = await this.$api.getSongDetail(sliceArr, timestamp)
       this.songs = this._normalizeSongs(res.songs)
-      console.log(this.songs)
     },
     // 用于处理歌曲
     _normalizeSongs(list) {
