@@ -19,6 +19,12 @@
 const progressBtnWidth = 12 //按钮的宽度
 export default {
   name: '',
+  props: {
+    percent: {
+      type: Number,
+      default: 0
+    }
+  },
   // 组件
   components: {},
   // 变量
@@ -80,12 +86,24 @@ export default {
       const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
       // console.log(this.$refs.progress.clientWidth / barWidth)
       return this.$refs.progress.clientWidth / barWidth
+    },
+    // 设置进度条的位置
+    setProgressOffset(percent) {
+      if (percent >= 0 && !this.touch.initiated) {
+        const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
+        const offsetWith = percent * barWidth
+        this._offset(offsetWith)
+      }
     }
   },
   // 计算属性
   computed: {},
   // 监控data中的数据变化
-  watch: {},
+  watch: {
+    percent(newVal) {
+      this.setProgressOffset(newVal)
+    }
+  },
   // 生命周期 - 创建完成(可以访问当前this实例)
   created() {},
   // 生命周期 - 挂载完成(可以访问dom元素)

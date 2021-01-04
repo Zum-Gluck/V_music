@@ -22,8 +22,11 @@
       </div>
       <!-- 进度条 -->
       <div class="progress-wrap" id="progress-wrap">
-        <p class="current-time">{{ formatTime(currentSong) }}</p>
-        <progress-bar @percentChange="percentChange"></progress-bar>
+        <p class="current-time">{{ formatTime(currentTime) }}</p>
+        <progress-bar
+          @percentChange="percentChange"
+          :percent="percent"
+        ></progress-bar>
         <div class="duration-time">
           {{ formatTime(currentSong.duration) }}
         </div>
@@ -36,54 +39,51 @@
         @playing="audioReady"
         @pause="audioPause"
         @error="audioError"
+        @timeupdate="updateTime($event)"
       ></audio>
+
+      <!-- 音量控件 -->
+      <div class="volume-wrap">
+        <i class="iconfont volume-icon" :class="Muted" @click="MutedClick"></i>
+        <div class="progress-bar">
+          <el-slider
+            style="width: 100%;"
+            class="bar-inner"
+            @change="changeVolume"
+            v-model="volumeNum"
+            :show-tooltip="false"
+          ></el-slider>
+        </div>
+      </div>
+
+      <!-- 工具栏 -->
+      <div class="tool">
+        <i class="iconfont"></i>
+        <i class="iconfont nicegeci32" @click="showLyric = !showLyric"></i>
+        <i class="iconfont nicebofangliebiao24"></i>
+      </div>
 
       <!-- Lyric List -->
       <transition name="fade">
-        <div class="lyric-box shadow">
+        <div class="lyric-box shadow" v-show="showLyric">
           <div class="title flex-between">歌词</div>
-          <scroll>
-            <div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
-              <div>123</div>
+          <scroll
+            class="lyric"
+            ref="lyricList"
+            :data="currentLyric && currentLyric.lines"
+          >
+            <div v-if="currentLyric">
+              <p
+                ref="lyricLine"
+                class="lyric-text"
+                :class="currentLyricNum == index ? 'active' : ''"
+                v-for="(item, index) of currentLyric.lines"
+                :key="index"
+              >
+                {{ item.txt }}
+              </p>
             </div>
+            <div v-else>暂无歌词</div>
           </scroll>
           <div class="foot"></div>
         </div>
@@ -108,7 +108,14 @@ export default {
   data() {
     return {
       songReady: false, // 是否开始播放
-      currentLyric: null //当前歌词
+      currentLyric: null, //当前歌词
+      currentTime: 0, //当前时间
+      isPureMusic: false, //是否 为纯音乐
+      currentLyricNum: 0, // 当前歌词行数
+      isMuted: false, //是否禁音
+      showLyric: false,
+      volumeNum: 50,
+      volume: 0.5
     }
   },
   // 方法
@@ -117,17 +124,28 @@ export default {
     audioReady() {
       clearTimeout(this.timer)
       this.songReady = true
+      this.canLyricPlay = true
+      if (this.currentLyric && !this.isPureMusic) {
+        this.currentLyric.seek(this.currentTime * 1000)
+      }
     },
     // 歌曲暂停
     audioPause() {
       clearTimeout(this.timer)
       if (!this.songReady) return
       this.SET_PLAYING_STATE(false)
+      if (this.currentLyric) {
+        this.currentLyric.stop()
+      }
     },
     // 歌曲错误
     audioError() {
       clearTimeout(this.timer)
       this.songReady = true
+    },
+    // 监听播放时间
+    updateTime(e) {
+      this.currentTime = e.target.currentTime
     },
     // 切换播放状态
     togglePlaying() {
@@ -163,19 +181,64 @@ export default {
     },
     // 监听进度条改变
     percentChange(percent) {
-      console.log(percent)
+      const currentTime = this.currentSong.duration * percent
+      this.currentTime = this.$refs.audio.currentTime = currentTime
+      if (this.currentLyric) {
+        this.currentLyric.seek(currentTime * 1000)
+      }
+      // 暂停中让他播放
+      if (!this.playing) {
+        this.togglePlaying()
+      }
     },
     // 处理歌词
     async getLyric(id) {
-      let res = await this.$api.getLyric(id)
-      if (res.code != 200) return
-      let lyric = res.lrc.lyric
-      this.currentLyric = new Lyric(lyric, this.lyricHandle)
-      console.log(this.currentLyric)
+      try {
+        let res = await this.$api.getLyric(id)
+        if (res.code != 200) return
+        let lyric = res.lrc.lyric
+        this.currentLyric = new Lyric(lyric, this.lyricHandle)
+        if (this.playing && this.canLyricPlay) {
+          this.currentLyric.seek(this.currentTime * 1000)
+        }
+      } catch (err) {
+        console.log(err)
+        this.currentLyric = null
+        this.currentLyricNum = 0
+      }
     },
     // 歌词回调
     lyricHandle({ lineNum, txt }) {
-      console.log(1)
+      this.currentLyricNum = lineNum
+      if (lineNum > 10) {
+        let lineEl = this.$refs.lyricLine[lineNum - 10]
+        if (this.$refs.lyricList) {
+          this.$nextTick(() => {
+            this.$refs.lyricList.scrollToElement(lineEl, 1000)
+          })
+        }
+      } else {
+        if (this.$refs.lyricList) {
+          this.$nextTick(() => {
+            this.$refs.lyricList.scrollTo(0, 0, 1000)
+          })
+        }
+      }
+    },
+    // 改变音量
+    changeVolume(callback) {
+      this.volume = callback / 100
+      console.log(this.volume)
+      this.$refs.audio.volume = this.volume
+    },
+    // 点击静音
+    MutedClick() {
+      if (!this.isMuted) {
+        this.$refs.audio.volume = 0
+      } else {
+        this.$refs.audio.volume = this.volume
+      }
+      this.isMuted = !this.isMuted
     },
     // 日期格式化
     formatTime(interval) {
@@ -193,6 +256,12 @@ export default {
   },
   // 计算属性
   computed: {
+    percent() {
+      return this.currentTime / this.currentSong.duration
+    },
+    Muted() {
+      return this.isMuted ? 'nicejingyin1' : 'niceshengyin1'
+    },
     ...mapGetters(['currentSong', 'playing', 'currentIndex', 'playList']),
     playIcon() {
       return this.playing ? 'nicezanting1' : 'nicebofang2'
@@ -206,13 +275,21 @@ export default {
       if (!newSong.id || !newSong.url || newSong.id === oldSong.id) {
         return
       }
+      console.log(newSong)
       this.songReady = false
-
+      this.canLyricPlay = false
+      if (this.currentLyric) {
+        this.currentLyric.stop()
+        this.currentTime = 0
+        this.currentLyric = null
+        this.currentLyricNum = 0
+      }
       // 播放
       this.$nextTick(() => {
         const audio = this.$refs.audio
         if (audio) {
           audio.src = newSong.url
+          audio.volume = this.volume
           audio.play()
         }
       })
@@ -235,6 +312,13 @@ export default {
           isPlaying ? audio.play() : audio.pause()
         }
       })
+    },
+    volume(newVal) {
+      if (newVal == 0) {
+        this.isMuted = true
+      } else {
+        this.isMuted = false
+      }
     }
   },
   // 生命周期 - 创建完成(可以访问当前this实例)
@@ -555,5 +639,8 @@ export default {
       }
     }
   }
+}
+.active{
+  color $color-theme
 }
 </style>
