@@ -34,13 +34,18 @@ export default {
     }
   },
   // 组件
-  components: {},
+  components: {
+  },
   // 变量
   data() {
     return {}
   },
   // 方法
-  methods: {},
+  methods: {
+    toSinger(singer) {
+      console.log(singer)
+    }
+  },
   // 计算属性
   computed: {},
   // 监控data中的数据变化
