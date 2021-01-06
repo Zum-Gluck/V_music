@@ -1,6 +1,6 @@
 import Layout from 'views/layout/Index.vue'
 
-export const routes =  [
+export const routes = [
   {
     path: '/',
     redirect: { name: 'home' },
@@ -49,6 +49,17 @@ export const routes =  [
         },
         component: resolve => {
           require(['views/singer/Index'], resolve)
+        }
+      },
+      {
+        path: '/singer-detail',
+        name: 'singerDetail',
+        meta: {
+          title: '详情',
+          keepAlive: true
+        },
+        component: resolve => {
+          require(['views/singer/detail/Index'], resolve)
         }
       },
       {

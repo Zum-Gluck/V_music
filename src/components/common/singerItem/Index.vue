@@ -34,8 +34,7 @@ export default {
     }
   },
   // 组件
-  components: {
-  },
+  components: {},
   // 变量
   data() {
     return {}
@@ -43,7 +42,12 @@ export default {
   // 方法
   methods: {
     toSinger(singer) {
-      console.log(singer)
+      this.$router.push({
+        name: 'singerDetail',
+        query: {
+          id: singer.id
+        }
+      })
     }
   },
   // 计算属性
