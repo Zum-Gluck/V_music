@@ -14,6 +14,8 @@ import 'swiper/css/swiper.css'
 Vue.use(VueAwesomeSwiper)
 Vue.config.productionTip = false
 
+import NiceLoading from './components/common/loading/Index'
+Vue.component('niceLoading', NiceLoading)
 
 Vue.prototype.$api = getApi
 Vue.prototype.utils = utils

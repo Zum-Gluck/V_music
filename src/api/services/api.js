@@ -30,5 +30,9 @@ export const getLyric = id => api.post(`/lyric?id=${id}`, {})
 /**
  * @method 获取歌手
  */
-
 export const getHotSinger = () => api.get('/top/artists?offset=0&limit=30', {})
+
+/**
+ * @method 获取歌手分类列表
+ */
+export const getSingerList = params => api.get(`/artist/list`, { params })

@@ -7,6 +7,7 @@
           v-for="item of langs"
           :key="item.value"
           :class="lang == item.value ? 'active' : ''"
+          @click="chooseType('lang', item.value)"
         >
           {{ item.label }}
         </li>
@@ -17,6 +18,7 @@
           v-for="item of classifys"
           :key="item.value"
           :class="classify == item.value ? 'active' : ''"
+          @click="chooseType('classify', item.value)"
         >
           {{ item.label }}
         </li>
@@ -27,23 +29,35 @@
           v-for="item of ens"
           :key="item.value"
           :class="en == item.value ? 'active' : ''"
+          @click="chooseType('en', item.value)"
         >
           {{ item.label }}
         </li>
       </ul>
-      <load-more> </load-more>
+      <load-more @scroll-state="load">
+        <ul class="singer-list">
+          <singer-item
+            v-for="item of singers"
+            :key="item.id"
+            :singer="item"
+          ></singer-item>
+        </ul>
+      </load-more>
+      <nice-loading v-if="loading"></nice-loading>
+      <div v-else class="over">已经到底部了</div>
     </div>
   </div>
 </template>
 
 <script>
 import loadMore from 'components/common/loadMore/Index'
-
+import SingerItem from 'components/common/singerItem/Index'
 export default {
   name: '',
   // 组件
   components: {
-    loadMore
+    loadMore,
+    SingerItem
   },
   // 变量
   data() {
@@ -68,7 +82,13 @@ export default {
       ],
       // 字母A-Z
       en: -1,
-      ens: []
+      ens: [],
+      singers: [],
+      params: {
+        offset: 0
+      },
+      loadStatus: false,
+      loading: false
     }
   },
   // 方法
@@ -90,6 +110,46 @@ export default {
         label: '其他'
       })
       this.ens = ens
+    },
+    chooseType(type, value) {
+      if (type == 'lang') {
+        this.lang = value
+        this.params.area = value
+      } else if (type == 'classify') {
+        this.classify = value
+        this.params.type = value
+      } else {
+        this.en = value
+        this.params.initial = value
+      }
+      this.params.offset = 0
+      this.loadStatus = true
+      this.singers = []
+      this.getSingerList()
+    },
+    load() {
+      if (this.loadStatus) {
+        this.getSingerList()
+      }
+    },
+    // 获取歌手列表
+    async getSingerList() {
+      try {
+        this.loadStatus = false
+        let res = await this.$api.getSingerList(this.params)
+        if (res.code == 200) {
+          this.singers = this.singers.concat(res.artists)
+          if (res.more) {
+            this.loading = true
+            this.loadStatus = true
+            this.params.offset += 30
+          } else {
+            this.loading = false
+          }
+        }
+      } catch (err) {
+        console.log(err)
+      }
     }
   },
   // 计算属性
@@ -101,7 +161,9 @@ export default {
     this.getEn()
   },
   // 生命周期 - 挂载完成(可以访问dom元素)
-  mounted() {}
+  mounted() {
+    this.getSingerList()
+  }
 }
 </script>
 
@@ -177,5 +239,10 @@ export default {
     margin-top: 30px;
     margin: 30px -15px 0;
   }
+}
+.over{
+  width 200px
+  text-align center
+  margin 0 auto;
 }
 </style>
