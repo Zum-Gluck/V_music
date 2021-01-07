@@ -414,7 +414,7 @@ export default {
   bottom: 0;
   right: 0;
   left: 0;
-  z-index: 8000;
+  z-index: 999;
   padding: 0 10px 0 20px;
   justify-content: space-between;
   .avatar {

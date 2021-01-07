@@ -83,6 +83,17 @@ export const routes = [
         component: resolve => {
           require(['views/mv/Index'], resolve)
         }
+      },
+      {
+        path: '/search',
+        name: 'search',
+        meta: {
+          title: '搜索',
+          keepAlive: true
+        },
+        component: resolve => {
+          require(['views/search/Index'], resolve)
+        }
       }
     ]
   }
