@@ -41,6 +41,17 @@ export const routes = [
         }
       },
       {
+        path: '/palylist-detail',
+        name: 'palylistDetail',
+        meta: {
+          title: '歌单详情',
+          keepAlive: true
+        },
+        component: resolve => {
+          require(['views/playlist/detail/Index'], resolve)
+        }
+      },
+      {
         path: '/singer',
         name: 'singer',
         meta: {

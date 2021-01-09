@@ -47,7 +47,7 @@
 <script>
 // ¸èµ¥ÁÐ±í×é¼þ
 export default {
-  data() {
+  data() {  
     return {}
   },
   props: {
@@ -66,16 +66,18 @@ export default {
     }
   },
   watch: {},
-  methods: {
+  methods: {  
     toDetail(item) {
       console.log(item)
       let query = {
         id: item.id
       }
-      this.$router.push({
-        name: 'playlistDetail',
+      let { href } = this.$router.push({
+        name: 'palylistDetail',
         query
       })
+
+      window.open(href, '_blank')
     }
   },
   created() {},
