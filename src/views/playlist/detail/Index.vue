@@ -74,6 +74,22 @@
         <!-- 评论 -->
         <el-card class="box-card">
           <div class="funs">精彩评论</div>
+          <div class="comment">
+            <div
+              v-for="(item, index) of hotComments"
+              :key="index"
+              class="comment-item flex-row"
+            >
+              <img :src="item.avatarUrl" alt="" />
+              <div>
+                <div class="username">
+                  {{ item.nickname }}
+                  <span class="time">{{ utils.formatMsgTime(item.time) }}</span>
+                </div>
+                <div class="content">{{ item.content }}</div>
+              </div>
+            </div>
+          </div>
         </el-card>
       </div>
       <!-- 右侧end -->
@@ -106,6 +122,10 @@ export default {
   methods: {
     // 跳转
     toRecommend(id) {
+      let arr = location.hash.split('=')
+      arr[1] = id
+      let str = arr.join('=')
+      location.hash = str
       this.initialize(id)
     },
     // tag跳转
@@ -124,7 +144,6 @@ export default {
         if (res.code != 200) return
         this.recommend = res.playlists
         this.AboutRecommend = this._normalizeAboutRecommend(this.recommend)
-        console.log(this.AboutRecommend)
       } catch (err) {
         console.log(err)
       }
@@ -168,7 +187,8 @@ export default {
       try {
         let res = await this.$api.getCommentPlaylist(param)
         if (res.code == 200) {
-          this.hotComments = res.hotComments
+          this.hotComments = this._normalizeComponent(res.hotComments)
+          console.log(this.hotComments)
         }
       } catch (err) {
         console.log(err)
@@ -239,6 +259,21 @@ export default {
       let ret = []
       list.forEach(item => {
         ret.push(createSong(item))
+      })
+      return ret
+    },
+    // 处理评论
+    _normalizeComponent(list) {
+      let ret = []
+      list.forEach((item, i) => {
+        let user = item.user
+        ret.push({
+          nickname: user.nickname,
+          userId: user.userId,
+          avatarUrl: user.avatarUrl,
+          content: item.content,
+          time: item.time
+        })
       })
       return ret
     },
@@ -405,6 +440,34 @@ export default {
     .ol_name {
       font-size 12px
       color #A5A5c1
+    }
+  }
+}
+.comment {
+  padding-top 10px
+  .comment-item {
+    padding 10px 0
+    img {
+      width 50px
+      height 50px
+      margin-right 14px
+      border-radius 50%
+      align-self flex-start
+    }
+    .username {
+      font-size 15px
+      color #4a4a4a
+      font-weight 700
+      .time {
+         font-size 12px
+         color #A5A5C1
+         font-weight 500
+      }
+    }
+    .content {
+      padding 5px 10px
+      margin-top 5px
+      background-color #f5f5f5
     }
   }
 }
