@@ -114,7 +114,7 @@ export default {
         }
       ],
       currentCat: '全部',
-      showFilter: false, 
+      showFilter: false,
       playList: [],
       sortType: 'hot',
       currentCat: '全部',
@@ -222,6 +222,11 @@ export default {
         })
       }
       return att
+    },
+    // 查看是否有query
+    chekQuery() {
+      if (!this.$route.query.cat) return
+      this.currentCat = this.$route.query.cat
     }
   },
   // 计算属性
@@ -232,6 +237,7 @@ export default {
   created() {},
   // 生命周期 - 挂载完成(可以访问dom元素)
   mounted() {
+    this.chekQuery()
     this.getCatList()
     this.getPlayList()
     this.getHotlist()

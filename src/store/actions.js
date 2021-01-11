@@ -26,7 +26,11 @@ export const selectPlay = function ({ commit, state }, { list, index }) {
 
 // 播放全部
 export const playAll = function ({ commit }, { list }) {
-
+  commit(types.SET_PLAY_MODE, playMode.sequence)
+  commit(types.SET_PLAYLIST, list)
+  commit(types.SET_SEQUENCE_LIST, list)
+  commit(types.SET_PLAYING_STATE, true)
+  commit(types.SET_CURRENT_INDEX, 0)
 }
 
 // 暂停播放

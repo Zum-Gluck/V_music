@@ -146,7 +146,7 @@ export default {
     },
     // 播放全部
     playAllSong() {
-      this.playAll({
+      this.playAll({ 
         list: this.songs
       })
     },
