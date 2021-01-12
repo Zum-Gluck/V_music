@@ -3,11 +3,11 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-import './assets/styles/common.css';
-import './assets/styles/reset.styl'
 import './plugins/element.js'
 import './plugins/swiper.js'
 import './plugins/kinesis.js'
+import './assets/styles/common.css';
+import './assets/styles/reset.styl'
 
 import getApi from '@/api/index'
 Vue.prototype.$api = getApi
