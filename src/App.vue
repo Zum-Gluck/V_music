@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <nice-header></nice-header>
+    <nice-header v-if="!$route.meta.isLogin"></nice-header>
     <router-view />
-    <nice-footer></nice-footer>
-    <player-bar></player-bar>
+    <nice-footer v-if="!$route.meta.isLogin"></nice-footer>
+    <player-bar v-if="!$route.meta.isLogin"></player-bar>
   </div>
 </template>
 

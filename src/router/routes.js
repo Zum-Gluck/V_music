@@ -107,5 +107,17 @@ export const routes = [
         }
       }
     ]
+  },
+  {
+    path: '/login',
+    name: 'login',
+    meta: {
+      title: '登录',
+      keepAlive: true,
+      isLogin: true
+    },
+    component: resolve => {
+      require(['views/login/Index'], resolve)
+    }
   }
 ]

@@ -4,6 +4,7 @@
       <div class="logo">
         <router-link :to="{ name: 'home' }" tag="a"></router-link>
       </div>
+      <!-- 导航开始 -->
       <ul class="nav flex-row">
         <li>
           <router-link :to="{ name: 'home' }" tag="a">发现音乐</router-link>
@@ -24,9 +25,19 @@
           <router-link :to="{ name: 'mv' }" tag="a">MV</router-link>
         </li>
       </ul>
+      <!-- 导航结束 -->
+
+      <!-- 搜索icon start -->
       <div class="search">
         <i class="iconfont nicesearch-o" @click="openSearchPop"></i>
       </div>
+      <!-- 搜索icon end -->
+
+      <div class="login">
+        <router-link :to="{ name: 'login' }">登录</router-link>
+      </div>
+
+      <!-- 搜索输入拟态框 -->
       <div class="search-wrap " :class="isOpen">
         <div class="overlay"></div>
         <div class="search-body">
@@ -76,6 +87,7 @@
           </div>
         </div>
       </div>
+      <!-- 搜索输入拟态框结束 -->
     </div>
   </div>
 </template>
@@ -135,6 +147,13 @@ export default {
   left: 0;
   right: 0;
   z-index: 2000;
+  .login {
+    border-left 1px #ccc solid
+    padding-left 20px
+    & a:hover {
+      color $color-theme
+    }
+  }
   .logo {
     width: 146px;
     display: flex;
