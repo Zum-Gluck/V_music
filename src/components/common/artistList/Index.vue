@@ -13,11 +13,8 @@
         <i class="iconfont niceicon-heart"></i>
         {{ collectText }}
       </div>
-      <!-- <div class="item" v-if="!isPerson">
-        <i class="iconfont nicefenxiang1"></i> 分享
-      </div> -->
     </div>
-    <table class="artist-table">
+    <table class="artist-table" v-loading="loadFlag">
       <thead>
         <tr>
           <th class="th-index">序号</th>
@@ -31,10 +28,7 @@
         <tr
           v-for="(item, index) of songs"
           :key="item.id"
-          :class="currentSong.id == item.id && playing
-              ? 'playing'
-              : ''
-          "
+          :class="currentSong.id == item.id && playing ? 'playing' : ''"
         >
           <td>
             <div class="index-container flex-center">
@@ -110,7 +104,9 @@
 import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
-    return {}
+    return {
+      loading: true
+    }
   },
   props: {
     songs: {
@@ -129,6 +125,9 @@ export default {
     ...mapGetters(['currentIndex', 'playing', 'currentSong']),
     collectText() {
       return this.subscribed ? '已收藏' : '收藏'
+    },
+    loadFlag() {
+      return this.songs.length == 0 ? true : false
     }
   },
   watch: {},
@@ -146,7 +145,7 @@ export default {
     },
     // 播放全部
     playAllSong() {
-      this.playAll({ 
+      this.playAll({
         list: this.songs
       })
     },

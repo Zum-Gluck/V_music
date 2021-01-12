@@ -44,7 +44,7 @@
         <el-card class="box-card">
           <div class="funs">喜欢这个歌单的人</div>
           <ul>
-            <li v-for="(item, index) of subscribers" :key="index">
+            <li v-for="item of subscribers" :key="item.nickname">
               <img :src="item.avatarUrl" :title="item.nickname" />
             </li>
           </ul>
@@ -55,8 +55,8 @@
           <div class="funs">相关推荐</div>
           <ol>
             <li
-              v-for="item of AboutRecommend"
-              :key="item.userId"
+              v-for="(item, index) of AboutRecommend"
+              :key="index"
               @click="toRecommend(item.id)"
               class="flex-row"
             >
@@ -76,8 +76,8 @@
           <div class="funs">精彩评论</div>
           <div class="comment">
             <div
-              v-for="(item, index) of hotComments"
-              :key="index"
+              v-for="item of hotComments"
+              :key="item.time"
               class="comment-item flex-row"
             >
               <img :src="item.avatarUrl" alt="" />
@@ -309,6 +309,9 @@ export default {
   // 生命周期 - 挂载完成(可以访问dom元素)
   mounted() {
     this.initialize(this.$route.query.id)
+    setInterval(() => {
+      console.log(this.hotComments)
+    }, 2000)
   }
 }
 </script>

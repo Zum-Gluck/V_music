@@ -2,8 +2,6 @@
   width: 100%;
   height: 100%;
 }
-body {
-}
 .container {
   max-width: 1380px;
   width: 100%;
@@ -72,6 +70,7 @@ body {
   overflow: hidden;
   font-weight: 700;
   line-height: 18px;
+  cursor: pointer;
 }
 
 /* shadow */
