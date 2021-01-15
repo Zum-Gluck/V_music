@@ -30,3 +30,19 @@ export const getUserRecord = (uid, type) =>
  */
 
 export const getUserArtist = uid => api.get(`/user/playlist?uid=${uid}`, {})
+
+/**
+ * @method 获取验证码
+ */
+export const getValidateCode = phone => api.get(`/captcha/sent?phone=${phone}`)
+
+/**
+ * @method 校验验证码
+ */
+export const checkValidateCode = params => api.get(`/captcha/verify`, { params })
+
+/**
+ * @method 获取登录状态
+ */
+
+export const getLoginStatus = () => api.get(`/login/status`, {})

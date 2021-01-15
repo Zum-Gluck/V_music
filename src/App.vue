@@ -22,4 +22,5 @@ export default {
 </script>
 <style lang="stylus" scoped>
 @import './assets/styles/iconfont.css';
+
 </style>

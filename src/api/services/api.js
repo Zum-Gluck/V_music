@@ -33,7 +33,7 @@ export const searchSuggest = keywords =>
  * @method 获取推荐歌单
  * @params limit 取出数量默认为 30
  */
-export const getPersonalizeds  = limit =>
+export const getPersonalizeds = limit =>
   api.get(`/personalized?limit=${limit}`, {})
 
 /**

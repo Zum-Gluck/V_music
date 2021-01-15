@@ -105,6 +105,17 @@ export const routes = [
         component: resolve => {
           require(['views/search/Index'], resolve)
         }
+      },
+      {
+        path: '/profile',
+        name: 'profile',
+        meta: {
+          title: '个人',
+          keepAlive: true
+        },
+        component: resolve => {
+          require(['views/profile/Index'], resolve)
+        }
       }
     ]
   },
@@ -116,8 +127,48 @@ export const routes = [
       keepAlive: true,
       isLogin: true
     },
+    redirect: { name: 'signIn' },
     component: resolve => {
       require(['views/login/Index'], resolve)
-    }
+    },
+    children: [
+      {
+        path: 'sign-in',
+        name: 'signIn',
+        meta: {
+          title: '登录',
+          keepAlive: true,
+          isLogin: true
+
+        },
+        component: resolve => {
+          require(['views/login/signIn/Index'], resolve)
+        }
+      },
+      {
+        path: 'sign-up',
+        name: 'signUp',
+        meta: {
+          title: '注册',
+          keepAlive: true,
+          isLogin: true
+        },
+        component: resolve => {
+          require(['views/login/signUp/Index'], resolve)
+        }
+      },
+      {
+        path: 'validate',
+        name: 'validate',
+        meta: {
+          title: '验证码登录',
+          keepAlive: true,
+          isLogin: true
+        },
+        component: resolve => {
+          require(['views/login/validate/Index'], resolve)
+        }
+      }
+    ]
   }
 ]
