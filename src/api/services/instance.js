@@ -34,7 +34,7 @@ instance.interceptors.response.use(response => {
   } else if (status === 301) {
     console.log('未登录')
     router.replace({
-      path: 'login'
+      name: 'login'
     })
   } else {
     return Promise.reject(response)
@@ -56,6 +56,8 @@ ajaxMethod.forEach(method => {
         .then(response => {
           if (response.code === 200) {
             resolve(response)
+          } else {
+            reject(response)
           }
         })
         .catch(error => {

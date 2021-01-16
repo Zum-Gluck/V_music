@@ -4,10 +4,11 @@ import api from './instance'
  * @method 手机登录
  * @params phone 用户id
  */
-export const login = (phone, password) =>
-  api.get(`/login/cellphone?phone=${phone}&password=${password}`, {
+export const login = (phone, password, timestamp) => {
+  return api.get(`/login/cellphone?phone=${phone}&password=${password}&timestamp=${timestamp}`, {
     withCredentials: true
   })
+}
 
 /**
  * @method 获取用户详情
@@ -46,3 +47,8 @@ export const checkValidateCode = params => api.get(`/captcha/verify`, { params }
  */
 
 export const getLoginStatus = () => api.get(`/login/status`, {})
+
+/**
+ * @method 退出登录
+ */
+export const loginOut = () => api.get(`/logout`, {})

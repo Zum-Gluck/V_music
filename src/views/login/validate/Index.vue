@@ -45,7 +45,9 @@
       </div>
       <div class="forget-password">
         <div>
-          <router-link :to="{ name: 'signIn' }">账号密码登录</router-link>
+          <router-link :to="{ name: 'signIn' }" replace>
+            账号密码登录
+          </router-link>
         </div>
         <div><a href="javascript:;">注册</a></div>
         <div><a href="#">忘记密码?</a></div>

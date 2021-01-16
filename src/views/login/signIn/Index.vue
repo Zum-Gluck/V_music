@@ -42,7 +42,9 @@
       </div>
       <div class="forget-password">
         <div>
-          <router-link :to="{ name: 'validate' }">验证码登录</router-link>
+          <router-link :to="{ name: 'validate' }" replace>
+            验证码登录
+          </router-link>
         </div>
         <div><a href="javascript:;">注册</a></div>
         <div><a href="#">忘记密码?</a></div>
@@ -116,24 +118,39 @@ export default {
     // 手机登录
     async _mobileLogin() {
       try {
-        let res = await this.$api.login(
-          this.userInfo.mobile,
-          this.userInfo.password
-        )
+        let timestamp = new Date().valueOf()
+        let { mobile: phone, password } = this.userInfo
+        console.log('----')
+        let res = await this.$api.login(phone, password, timestamp)
+        console.log(res)
         if (res.code == 200) {
+          console.log(res)
           this.$message({
             type: 'success',
             message: '登录成功'
           })
-          this.$replace({
+          this.$router.replace({
             name: 'profile'
           })
         }
       } catch (err) {
+        let msg = ''
+        if (err.message) {
+          msg = err.message
+        } else {
+          msg = err.data.message
+        }
         this.$message({
           type: 'error',
-          message: err.data.msg
+          message: msg
         })
+      }
+    },
+    async _checkLoginStatus() {
+      try {
+        let res = await this.$api.getLoginStatus()
+      } catch (err) {
+        console.log(err)
       }
     },
     // 邮箱登录
