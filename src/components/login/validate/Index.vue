@@ -49,8 +49,14 @@
             账号密码登录
           </router-link>
         </div>
-        <div><a href="javascript:;">注册</a></div>
-        <div><a href="#">忘记密码?</a></div>
+        <div>
+          <router-link :to="{ name: 'signUp' }">
+            注册
+          </router-link>
+        </div>
+        <div>
+          <router-link :to="{ name: 'forget' }"> 忘记密码 </router-link>
+        </div>
       </div>
     </el-form>
   </div>

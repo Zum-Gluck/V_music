@@ -142,7 +142,7 @@ export const routes = [
 
         },
         component: resolve => {
-          require(['views/login/signIn/Index'], resolve)
+          require(['components/login/signIn/Index'], resolve)
         }
       },
       {
@@ -154,7 +154,7 @@ export const routes = [
           isLogin: true
         },
         component: resolve => {
-          require(['views/login/signUp/Index'], resolve)
+          require(['components/login/signUp/Index'], resolve)
         }
       },
       {
@@ -166,7 +166,43 @@ export const routes = [
           isLogin: true
         },
         component: resolve => {
-          require(['views/login/validate/Index'], resolve)
+          require(['components/login/validate/Index'], resolve)
+        }
+      },
+      {
+        path: 'forget',
+        name: 'forget',
+        meta: {
+          title: '忘记密码',
+          keepAlive: true,
+          isLogin: true
+        },
+        component: resolve => {
+          require(['components/login/forget/Index'], resolve)
+        }
+      },
+      {
+        path: 'wait',
+        name: 'wait',
+        meta: {
+          title: '扫码登录',
+          keepAlive: true,
+          isLogin: true
+        },
+        component: resolve => {
+          require(['components/login/wait/Index'], resolve)
+        }
+      },
+      {
+        path: 'qrcode',
+        name: 'qrcode',
+        meta: {
+          title: '扫码登录',
+          keepAlive: true,
+          isLogin: true
+        },
+        component: resolve => {
+          require(['components/login/qrcode/Index'], resolve)
         }
       }
     ]

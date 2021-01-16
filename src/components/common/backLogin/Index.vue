@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <h1>我的</h1>
-  </div>
+  <div class="back" @click="backClick">返回登录</div>
 </template>
 
 <script>
@@ -14,7 +12,11 @@ export default {
     return {}
   },
   // 方法
-  methods: {},
+  methods: {
+    backClick() {
+      this.$router.back()
+    }
+  },
   // 计算属性
   computed: {},
   // 监控data中的数据变化
@@ -22,10 +24,14 @@ export default {
   // 生命周期 - 创建完成(可以访问当前this实例)
   created() {},
   // 生命周期 - 挂载完成(可以访问dom元素)
-  mounted() {
-    // this.$api.loginOut()
-  }
+  mounted() {}
 }
 </script>
 
-<style lang="stylus" scoped></style>
+<style lang="stylus" scoped>
+.back
+  position absolute
+  top 6px
+  left 10px
+  cursor pointer
+</style>

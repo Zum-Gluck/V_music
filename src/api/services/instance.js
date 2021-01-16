@@ -30,7 +30,7 @@ instance.interceptors.response.use(response => {
   let status = response.status
 
   if (status === 200) {
-    return Promise.resolve(data)
+    return Promise.resolve(data) 
   } else if (status === 301) {
     console.log('未登录')
     router.replace({
@@ -42,7 +42,6 @@ instance.interceptors.response.use(response => {
 }, error => {
   console.log(error);
 })
-
 
 
 // 下面代码的作用是 将instance 换个名字调用 换成api

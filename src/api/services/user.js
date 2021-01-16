@@ -4,11 +4,18 @@ import api from './instance'
  * @method 手机登录
  * @params phone 用户id
  */
-export const login = (phone, password, timestamp) => {
-  return api.get(`/login/cellphone?phone=${phone}&password=${password}&timestamp=${timestamp}`, {
+export const login = (phone, password, timestamp) =>
+  api.get(`/login/cellphone?phone=${phone}&password=${password}&timestamp=${timestamp}`, {
     withCredentials: true
   })
-}
+
+
+/**
+ * @method 邮箱登录
+ */
+export const loginEmail = (email, password) => api.get(`/login?email=${email}&password=${password}`, {
+  withCredentials: true
+})
 
 /**
  * @method 获取用户详情
@@ -52,3 +59,8 @@ export const getLoginStatus = () => api.get(`/login/status`, {})
  * @method 退出登录
  */
 export const loginOut = () => api.get(`/logout`, {})
+
+/**
+ * @method 获取二维码Key用于生成二维码
+ */
+export const getQrKey = timestamp => api.get(`/login/qr/key?timestamp=${timestamp}`, { withCredentials: true })

@@ -1,6 +1,10 @@
 <template>
   <div>
-    <h1>我的</h1>
+    <h1>由于网易的限制 此功能暂无法使用</h1>
+    <br />
+    <br />
+    <br />
+    <router-link :to="{ name: 'signIn' }" replace>其他方式登录</router-link>
   </div>
 </template>
 
@@ -22,9 +26,7 @@ export default {
   // 生命周期 - 创建完成(可以访问当前this实例)
   created() {},
   // 生命周期 - 挂载完成(可以访问dom元素)
-  mounted() {
-    // this.$api.loginOut()
-  }
+  mounted() {}
 }
 </script>
 

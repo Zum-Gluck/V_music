@@ -46,8 +46,14 @@
             验证码登录
           </router-link>
         </div>
-        <div><a href="javascript:;">注册</a></div>
-        <div><a href="#">忘记密码?</a></div>
+        <div>
+          <router-link :to="{ name: 'signUp' }">
+            注册
+          </router-link>
+        </div>
+        <div>
+          <router-link :to="{ name: 'forget' }"> 忘记密码 </router-link>
+        </div>
       </div>
     </el-form>
   </div>
@@ -106,7 +112,7 @@ export default {
               this._mobileLogin()
               break
             case 'email':
-              console.log(2)
+              this._emailLogin()
               break
           }
         } else {
@@ -120,9 +126,7 @@ export default {
       try {
         let timestamp = new Date().valueOf()
         let { mobile: phone, password } = this.userInfo
-        console.log('----')
         let res = await this.$api.login(phone, password, timestamp)
-        console.log(res)
         if (res.code == 200) {
           console.log(res)
           this.$message({
@@ -154,7 +158,17 @@ export default {
       }
     },
     // 邮箱登录
-    _emailLogin() {}
+    async _emailLogin() {
+      try {
+        let { mobile: email, password } = this.userInfo
+        let res = await this.$api.loginEmail(email, password)
+        console.log(res)
+      } catch (err) {
+        if (!err.message)
+          return this.$message.error('邮箱不存在,可以使用验证码登录')
+        this.$message.error(err.message)
+      }
+    }
   },
   // 计算属性
   computed: {},

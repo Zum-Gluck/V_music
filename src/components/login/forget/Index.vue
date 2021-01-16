@@ -1,14 +1,20 @@
 <template>
   <div>
-    <h1>我的</h1>
+    <back-login></back-login>
+    <h1>忘记密码</h1>
   </div>
 </template>
 
 <script>
+import backLogin from '../../common/backLogin/Index'
+import waitMinute from '../../common/waitMinute/Index'
 export default {
   name: '',
   // 组件
-  components: {},
+  components: {
+    backLogin,
+    waitMinute
+  },
   // 变量
   data() {
     return {}
@@ -23,7 +29,6 @@ export default {
   created() {},
   // 生命周期 - 挂载完成(可以访问dom元素)
   mounted() {
-    // this.$api.loginOut()
   }
 }
 </script>
