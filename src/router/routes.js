@@ -185,7 +185,7 @@ export const routes = [
         path: 'wait',
         name: 'wait',
         meta: {
-          title: '扫码登录',
+          title: '获取验证码',
           keepAlive: true,
           isLogin: true
         },
